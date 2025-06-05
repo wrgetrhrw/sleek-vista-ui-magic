@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { Zap, Play, Square, BarChart2, Save, Download } from "lucide-react";
 import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const FineTuneModel = () => {
   const [isFineTuning, setIsFineTuning] = useState(false);
@@ -88,10 +89,30 @@ const FineTuneModel = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm text-slate-400">Learning Rate</label>
+                <label className="text-sm text-slate-400">LoRA Rank</label>
                 <Input 
-                  type="text" 
-                  defaultValue="5e-5" 
+                  type="number" 
+                  defaultValue="8" 
+                  className="bg-slate-800/50 border-slate-700 text-white"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm text-slate-400">LoRA Alpha</label>
+                <Input 
+                  type="number" 
+                  defaultValue="16" 
+                  className="bg-slate-800/50 border-slate-700 text-white"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm text-slate-400">Epochs</label>
+                <Input 
+                  type="number" 
+                  defaultValue="1" 
                   className="bg-slate-800/50 border-slate-700 text-white"
                 />
               </div>
@@ -100,13 +121,43 @@ const FineTuneModel = () => {
                 <label className="text-sm text-slate-400">Batch Size</label>
                 <Input 
                   type="number" 
-                  defaultValue="1024" 
+                  defaultValue="4" 
                   className="bg-slate-800/50 border-slate-700 text-white"
                 />
               </div>
             </div>
 
-            <div className="flex gap-3 pt-2">
+            <div className="space-y-2">
+              <label className="text-sm text-slate-400">Learning Rate</label>
+              <Input 
+                type="text" 
+                defaultValue="0.000300" 
+                className="bg-slate-800/50 border-slate-700 text-white"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-slate-400">Output Directory</label>
+              <div className="flex gap-2">
+                <Input 
+                  type="text" 
+                  defaultValue="./home/ubuntu/finetuning_output" 
+                  className="bg-slate-800/50 border-slate-700 text-white flex-1"
+                />
+                <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
+                  Browse...
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox id="mixed-precision-ft" className="border-slate-700 data-[state=checked]:bg-teal-600" />
+              <label htmlFor="mixed-precision-ft" className="text-sm text-slate-400">
+                Enable Mixed Precision (fp16)
+              </label>
+            </div>
+
+            <div className="flex flex-wrap gap-3 pt-2">
               <Button className="bg-slate-700 hover:bg-slate-600 text-white">
                 <Save className="w-4 h-4 mr-2" />
                 Save Finetuning Preset
@@ -114,7 +165,7 @@ const FineTuneModel = () => {
               <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
                 Load Finetuning Preset
               </Button>
-              <Button variant="outline" className="ml-auto border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
+              <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
                 Reset to Defaults
               </Button>
             </div>
