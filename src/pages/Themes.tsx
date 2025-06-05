@@ -1,9 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Palette, Check } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 
 const themeOptions = [
   { id: "light", name: "Light" },
@@ -19,10 +17,6 @@ const themeOptions = [
 const Themes = () => {
   const [selectedTheme, setSelectedTheme] = useState("dark");
 
-  const applyTheme = () => {
-    toast.success(`${themeOptions.find(t => t.id === selectedTheme)?.name} theme applied successfully!`);
-  };
-
   return (
     <div className="p-6 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen">
       <div className="mb-8">
@@ -30,14 +24,14 @@ const Themes = () => {
         <p className="text-slate-400">Customize the appearance of your application</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {themeOptions.map((theme) => (
           <Card 
             key={theme.id}
             onClick={() => setSelectedTheme(theme.id)}
             className={`cursor-pointer transition-all duration-200 hover:scale-105 ${
               selectedTheme === theme.id 
-                ? "bg-slate-800 border-teal-500" 
+                ? "bg-slate-800 border-blue-500" 
                 : "bg-slate-900/50 border-slate-800"
             }`}
           >
@@ -61,16 +55,7 @@ const Themes = () => {
         ))}
       </div>
 
-      <div className="flex justify-center mb-8">
-        <Button 
-          onClick={applyTheme}
-          className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-2 text-lg"
-        >
-          Apply Theme
-        </Button>
-      </div>
-
-      <div className="text-center text-sm text-slate-500">
+      <div className="mt-8 text-center text-sm text-slate-500">
         <p>Theme preferences are saved between sessions</p>
       </div>
     </div>
