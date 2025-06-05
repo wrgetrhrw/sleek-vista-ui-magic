@@ -21,46 +21,46 @@ export const useTheme = () => {
 const themeConfigs = {
   light: {
     background: "0 0% 100%",
-    foreground: "222.2 84% 4.9%",
+    foreground: "220 13% 18%",
     card: "0 0% 100%",
-    cardForeground: "222.2 84% 4.9%",
+    cardForeground: "220 13% 18%",
     popover: "0 0% 100%",
-    popoverForeground: "222.2 84% 4.9%",
-    primary: "221.2 83.2% 53.3%",
-    primaryForeground: "210 40% 98%",
-    secondary: "210 40% 96.1%",
-    secondaryForeground: "222.2 47.4% 11.2%",
-    muted: "210 40% 96.1%",
-    mutedForeground: "215.4 16.3% 46.9%",
-    accent: "210 40% 96.1%",
-    accentForeground: "222.2 47.4% 11.2%",
+    popoverForeground: "220 13% 18%",
+    primary: "220.9 39.3% 11%",
+    primaryForeground: "210 20% 98%",
+    secondary: "220 14.3% 95.9%",
+    secondaryForeground: "220.9 39.3% 11%",
+    muted: "220 14.3% 95.9%",
+    mutedForeground: "220 8.9% 46.1%",
+    accent: "220 14.3% 95.9%",
+    accentForeground: "220.9 39.3% 11%",
     destructive: "0 84.2% 60.2%",
-    destructiveForeground: "210 40% 98%",
-    border: "214.3 31.8% 91.4%",
-    input: "214.3 31.8% 91.4%",
-    ring: "221.2 83.2% 53.3%",
+    destructiveForeground: "210 20% 98%",
+    border: "220 13% 91%",
+    input: "220 13% 91%",
+    ring: "224.3 76.3% 48%",
     isDark: false
   },
   dark: {
-    background: "222.2 84% 4.9%",
-    foreground: "210 40% 98%",
-    card: "222.2 84% 4.9%",
-    cardForeground: "210 40% 98%",
-    popover: "222.2 84% 4.9%",
-    popoverForeground: "210 40% 98%",
-    primary: "217.2 91.2% 59.8%",
-    primaryForeground: "222.2 84% 4.9%",
-    secondary: "217.2 32.6% 17.5%",
-    secondaryForeground: "210 40% 98%",
-    muted: "217.2 32.6% 17.5%",
-    mutedForeground: "215 20.2% 65.1%",
-    accent: "217.2 32.6% 17.5%",
-    accentForeground: "210 40% 98%",
+    background: "220 13% 9%",
+    foreground: "210 20% 98%",
+    card: "220 13% 11%",
+    cardForeground: "210 20% 98%",
+    popover: "220 13% 11%",
+    popoverForeground: "210 20% 98%",
+    primary: "210 20% 98%",
+    primaryForeground: "220.9 39.3% 11%",
+    secondary: "215 27.9% 16.9%",
+    secondaryForeground: "210 20% 98%",
+    muted: "215 27.9% 16.9%",
+    mutedForeground: "217.9 10.6% 64.9%",
+    accent: "215 27.9% 16.9%",
+    accentForeground: "210 20% 98%",
     destructive: "0 62.8% 50.6%",
-    destructiveForeground: "210 40% 98%",
-    border: "217.2 32.6% 17.5%",
-    input: "217.2 32.6% 17.5%",
-    ring: "224.3 76.3% 48%",
+    destructiveForeground: "210 20% 98%",
+    border: "215 27.9% 16.9%",
+    input: "215 27.9% 16.9%",
+    ring: "216 12.2% 83.9%",
     isDark: true
   },
   nord: {
@@ -207,11 +207,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const root = document.documentElement;
     const config = themeConfigs[theme];
     
-    // Apply all CSS variables
+    // Apply all CSS variables (excluding isDark which is not a CSS variable)
     Object.entries(config).forEach(([key, value]) => {
       if (key !== 'isDark') {
         const cssVarName = `--${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-        root.style.setProperty(cssVarName, value);
+        root.style.setProperty(cssVarName, value as string);
       }
     });
 
