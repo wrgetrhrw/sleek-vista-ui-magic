@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { Brain, Play, Square, BarChart2, Save, FileJson } from "lucide-react";
 import { useState } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const TrainModel = () => {
   const [isTraining, setIsTraining] = useState(false);
@@ -87,17 +88,69 @@ const TrainModel = () => {
                 </SelectContent>
               </Select>
             </div>
-            
-            <div className="space-y-2">
-              <label className="text-sm text-slate-400">Batch Size</label>
-              <Input 
-                type="number" 
-                defaultValue="1024" 
-                className="bg-slate-800/50 border-slate-700 text-white"
-              />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm text-slate-400">Epochs</label>
+                <Input 
+                  type="number" 
+                  defaultValue="3" 
+                  className="bg-slate-800/50 border-slate-700 text-white"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm text-slate-400">Batch Size (per device)</label>
+                <Input 
+                  type="number" 
+                  defaultValue="8" 
+                  className="bg-slate-800/50 border-slate-700 text-white"
+                />
+              </div>
             </div>
 
-            <div className="flex gap-3 pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm text-slate-400">Learning Rate</label>
+                <Input 
+                  type="text" 
+                  defaultValue="0.000301" 
+                  className="bg-slate-800/50 border-slate-700 text-white"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm text-slate-400">Gradient Accumulation Steps</label>
+                <Input 
+                  type="number" 
+                  defaultValue="1" 
+                  className="bg-slate-800/50 border-slate-700 text-white"
+                />
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm text-slate-400">Output Directory</label>
+              <div className="flex gap-2">
+                <Input 
+                  type="text" 
+                  defaultValue="./home/ubuntu/training_output/01" 
+                  className="bg-slate-800/50 border-slate-700 text-white flex-1"
+                />
+                <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
+                  Browse...
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox id="mixed-precision" className="border-slate-700 data-[state=checked]:bg-blue-600" />
+              <label htmlFor="mixed-precision" className="text-sm text-slate-400">
+                Enable Mixed Precision (fp16/bf16)
+              </label>
+            </div>
+
+            <div className="flex flex-wrap gap-3 pt-2">
               <Button className="bg-slate-700 hover:bg-slate-600 text-white">
                 <Save className="w-4 h-4 mr-2" />
                 Save Config
@@ -106,7 +159,7 @@ const TrainModel = () => {
                 <FileJson className="w-4 h-4 mr-2" />
                 Load Config
               </Button>
-              <Button variant="outline" className="ml-auto border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
+              <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
                 Reset Config
               </Button>
             </div>
