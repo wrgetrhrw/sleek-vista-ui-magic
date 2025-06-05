@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { HelpCircle, Book, MessageCircle, GitHub, ExternalLink } from "lucide-react";
+import { HelpCircle, Book, MessageCircle, Github, ExternalLink } from "lucide-react";
 
 const Help = () => {
   return (
@@ -115,7 +115,7 @@ const Help = () => {
                 href="#" 
                 className="flex items-center gap-3 text-white hover:text-blue-400 transition-colors p-3 rounded-lg hover:bg-slate-800/50"
               >
-                <GitHub className="w-5 h-5" />
+                <Github className="w-5 h-5" />
                 <div>
                   <p className="font-medium">GitHub</p>
                   <p className="text-sm text-slate-400">Source code and issue tracker</p>
