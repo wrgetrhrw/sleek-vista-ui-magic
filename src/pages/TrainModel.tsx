@@ -4,31 +4,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { Brain, Play, Square, BarChart2, Save, FileJson, Download, Settings } from "lucide-react";
+import { Zap, Play, Square, BarChart2, Download, Save, Settings, Cpu, HardDrive } from "lucide-react";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 
 const TrainModel = () => {
   const [isTraining, setIsTraining] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
 
   const startTraining = () => {
     setIsTraining(true);
     setProgress(0);
-    setIsCompleted(false);
     
     // Simulate training progress
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setIsTraining(false);
-          setIsCompleted(true);
           return 100;
         }
-        return prev + 1;
+        return prev + 2;
       });
     }, 200);
   };
@@ -36,305 +32,271 @@ const TrainModel = () => {
   const stopTraining = () => {
     setIsTraining(false);
     setProgress(0);
-    setIsCompleted(false);
-  };
-
-  const downloadModel = () => {
-    // Simulate model download
-    const link = document.createElement('a');
-    link.href = '#';
-    link.download = 'trained_model.zip';
-    link.click();
   };
 
   return (
     <div className="p-6 min-h-screen bg-background">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Model Training Configuration
-        </h1>
-        <p className="text-muted-foreground">Configure and train your custom AI model</p>
-      </div>
+      <h1 className="text-3xl font-bold text-foreground mb-6">Train Model</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Configuration Section */}
-        <Card className="border-border">
-          <CardHeader className="pb-4">
+        {/* Model Configuration */}
+        <Card>
+          <CardHeader className="pb-2">
             <CardTitle className="text-foreground flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              Training Configuration
+              <Settings className="w-5 h-5 text-primary" />
+              Model Configuration
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Basic Settings */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium text-foreground">Basic Settings</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Training Task Type</Label>
-                  <Select defaultValue="casual-lm">
-                    <SelectTrigger className="bg-background border-input">
-                      <SelectValue placeholder="Select task type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="casual-lm">Casual Language Modeling</SelectItem>
-                      <SelectItem value="seq-class">Sequence Classification</SelectItem>
-                      <SelectItem value="token-class">Token Classification</SelectItem>
-                      <SelectItem value="question-answer">Question Answering</SelectItem>
-                      <SelectItem value="summarization">Text Summarization</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Base Model</Label>
-                  <Select defaultValue="llama-7b">
-                    <SelectTrigger className="bg-background border-input">
-                      <SelectValue placeholder="Select model" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="llama-7b">LLaMa 7B</SelectItem>
-                      <SelectItem value="llama-13b">LLaMa 13B</SelectItem>
-                      <SelectItem value="gpt-neo">GPT-Neo</SelectItem>
-                      <SelectItem value="bert">BERT Base</SelectItem>
-                      <SelectItem value="bert-large">BERT Large</SelectItem>
-                      <SelectItem value="roberta">RoBERTa</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm text-muted-foreground">Model Architecture</label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select architecture" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="transformer">Transformer</SelectItem>
+                    <SelectItem value="cnn">CNN</SelectItem>
+                    <SelectItem value="rnn">RNN</SelectItem>
+                    <SelectItem value="lstm">LSTM</SelectItem>
+                    <SelectItem value="bert">BERT</SelectItem>
+                    <SelectItem value="gpt">GPT</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Dataset</Label>
-                <Select defaultValue="text-dataset">
-                  <SelectTrigger className="bg-background border-input">
-                    <SelectValue placeholder="Select dataset" />
+                <label className="text-sm text-muted-foreground">Model Size</label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select size" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="text-dataset">Custom Text Dataset</SelectItem>
-                    <SelectItem value="code-dataset">Code Dataset</SelectItem>
-                    <SelectItem value="conversation">Conversation Dataset</SelectItem>
-                    <SelectItem value="instruction">Instruction Following</SelectItem>
+                    <SelectItem value="small">Small (125M)</SelectItem>
+                    <SelectItem value="medium">Medium (350M)</SelectItem>
+                    <SelectItem value="large">Large (1.3B)</SelectItem>
+                    <SelectItem value="xl">XL (2.7B)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            {/* Training Parameters */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium text-foreground">Training Parameters</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Epochs</Label>
-                  <Input 
-                    type="number" 
-                    defaultValue="3" 
-                    className="bg-background border-input"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Batch Size (per device)</Label>
-                  <Input 
-                    type="number" 
-                    defaultValue="8" 
-                    className="bg-background border-input"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Learning Rate</Label>
-                  <Input 
-                    type="text" 
-                    defaultValue="0.000301" 
-                    className="bg-background border-input"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Gradient Accumulation Steps</Label>
-                  <Input 
-                    type="number" 
-                    defaultValue="1" 
-                    className="bg-background border-input"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Max Sequence Length</Label>
-                  <Input 
-                    type="number" 
-                    defaultValue="2048" 
-                    className="bg-background border-input"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Warmup Steps</Label>
-                  <Input 
-                    type="number" 
-                    defaultValue="100" 
-                    className="bg-background border-input"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Weight Decay</Label>
-                  <Input 
-                    type="text" 
-                    defaultValue="0.01" 
-                    className="bg-background border-input"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm text-muted-foreground">Save Steps</Label>
-                  <Input 
-                    type="number" 
-                    defaultValue="500" 
-                    className="bg-background border-input"
-                  />
-                </div>
-              </div>
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Dataset</label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select dataset" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="custom">Custom Dataset</SelectItem>
+                  <SelectItem value="wikipedia">Wikipedia</SelectItem>
+                  <SelectItem value="commoncrawl">Common Crawl</SelectItem>
+                  <SelectItem value="books">Books Corpus</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            
-            {/* Output Configuration */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium text-foreground">Output Configuration</h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Output Directory</Label>
-                <div className="flex gap-2">
-                  <Input 
-                    type="text" 
-                    defaultValue="./training_output/model_01" 
-                    className="bg-background border-input flex-1"
-                  />
-                  <Button variant="outline" className="border-input hover:bg-accent">
-                    Browse...
-                  </Button>
-                </div>
+                <label className="text-sm text-muted-foreground">Epochs</label>
+                <Input type="number" defaultValue="10" />
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm text-muted-foreground">Batch Size</label>
+                <Input type="number" defaultValue="32" />
               </div>
             </div>
 
-            {/* Advanced Options */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium text-foreground">Advanced Options</h3>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="mixed-precision" className="border-input" />
-                  <Label htmlFor="mixed-precision" className="text-sm text-muted-foreground">
-                    Enable Mixed Precision (fp16/bf16)
-                  </Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="gradient-checkpointing" className="border-input" />
-                  <Label htmlFor="gradient-checkpointing" className="text-sm text-muted-foreground">
-                    Enable Gradient Checkpointing
-                  </Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="dataloader-drop-last" className="border-input" />
-                  <Label htmlFor="dataloader-drop-last" className="text-sm text-muted-foreground">
-                    Drop Last Incomplete Batch
-                  </Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="remove-unused-columns" className="border-input" />
-                  <Label htmlFor="remove-unused-columns" className="text-sm text-muted-foreground">
-                    Remove Unused Columns
-                  </Label>
-                </div>
-              </div>
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Learning Rate</label>
+              <Input type="text" defaultValue="0.001" />
             </div>
 
-            <div className="flex flex-wrap gap-3 pt-4">
-              <Button className="bg-primary hover:bg-primary/90">
-                <Save className="w-4 h-4 mr-2" />
-                Save Config
-              </Button>
-              <Button variant="outline" className="border-input hover:bg-accent">
-                <FileJson className="w-4 h-4 mr-2" />
-                Load Config
-              </Button>
-              <Button variant="outline" className="border-input hover:bg-accent">
-                Reset Config
-              </Button>
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Sequence Length: 512</label>
+              <Slider defaultValue={[512]} max={2048} min={128} step={128} />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Dropout Rate: 0.1</label>
+              <Slider defaultValue={[0.1]} max={0.5} min={0.0} step={0.05} />
             </div>
           </CardContent>
         </Card>
 
-        {/* Training Monitor */}
-        <Card className="border-border">
-          <CardHeader className="pb-4">
+        {/* Hardware & Advanced Settings */}
+        <Card>
+          <CardHeader className="pb-2">
             <CardTitle className="text-foreground flex items-center gap-2">
-              <Brain className="w-5 h-5" />
-              Training Monitor
+              <Cpu className="w-5 h-5 text-primary" />
+              Hardware & Advanced Settings
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="flex gap-3 mb-6">
-              {!isTraining ? (
-                <Button onClick={startTraining} className="bg-green-600 hover:bg-green-700">
-                  <Play className="w-4 h-4 mr-2" />
-                  Start Training
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Compute Type</label>
+              <Select defaultValue="gpu">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cpu">CPU Only</SelectItem>
+                  <SelectItem value="gpu">Single GPU</SelectItem>
+                  <SelectItem value="multi-gpu">Multi-GPU</SelectItem>
+                  <SelectItem value="tpu">TPU</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Precision</label>
+              <Select defaultValue="fp16">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fp32">FP32 (Full Precision)</SelectItem>
+                  <SelectItem value="fp16">FP16 (Half Precision)</SelectItem>
+                  <SelectItem value="bf16">BF16 (Brain Float)</SelectItem>
+                  <SelectItem value="int8">INT8 (Quantized)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Optimizer</label>
+              <Select defaultValue="adamw">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="adamw">AdamW</SelectItem>
+                  <SelectItem value="adam">Adam</SelectItem>
+                  <SelectItem value="sgd">SGD</SelectItem>
+                  <SelectItem value="rmsprop">RMSprop</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Scheduler</label>
+              <Select defaultValue="cosine">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cosine">Cosine Annealing</SelectItem>
+                  <SelectItem value="linear">Linear</SelectItem>
+                  <SelectItem value="step">Step LR</SelectItem>
+                  <SelectItem value="exponential">Exponential</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Output Directory</label>
+              <div className="flex gap-2">
+                <Input defaultValue="./models/training_output" className="flex-1" />
+                <Button variant="outline">
+                  Browse
                 </Button>
-              ) : (
-                <Button onClick={stopTraining} className="bg-red-600 hover:bg-red-700">
-                  <Square className="w-4 h-4 mr-2" />
-                  Stop Training
-                </Button>
-              )}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="gradient-checkpointing" />
+                <label htmlFor="gradient-checkpointing" className="text-sm text-muted-foreground">
+                  Enable Gradient Checkpointing
+                </label>
+              </div>
               
-              {isCompleted && (
-                <Button onClick={downloadModel} className="bg-blue-600 hover:bg-blue-700">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Model
-                </Button>
-              )}
+              <div className="flex items-center space-x-2">
+                <Checkbox id="early-stopping" />
+                <label htmlFor="early-stopping" className="text-sm text-muted-foreground">
+                  Enable Early Stopping
+                </label>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Checkbox id="wandb-logging" />
+                <label htmlFor="wandb-logging" className="text-sm text-muted-foreground">
+                  Enable W&B Logging
+                </label>
+              </div>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Training Control */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-foreground flex items-center gap-2">
+            <Zap className="w-5 h-5 text-primary" />
+            Training Control & Monitor
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-3 mb-6">
+            {!isTraining ? (
+              <Button onClick={startTraining} className="bg-primary hover:bg-primary/90">
+                <Play className="w-4 h-4 mr-2" />
+                Start Training
+              </Button>
+            ) : (
+              <Button onClick={stopTraining} variant="destructive">
+                <Square className="w-4 h-4 mr-2" />
+                Stop Training
+              </Button>
+            )}
             
-            <div className="mb-2 flex justify-between">
-              <span className="text-sm text-muted-foreground">Progress</span>
-              <span className="text-sm text-primary">{progress}%</span>
-            </div>
-            <Progress value={progress} className="h-2 mb-6" />
+            <Button variant="secondary">
+              <Save className="w-4 h-4 mr-2" />
+              Save Configuration
+            </Button>
             
-            <div className="rounded-lg bg-muted p-4 h-40 overflow-auto text-sm text-foreground font-mono mb-4">
+            <Button disabled={!isTraining && progress < 100}>
+              <Download className="w-4 h-4 mr-2" />
+              Download Trained Model
+            </Button>
+          </div>
+          
+          <div className="mb-2 flex justify-between">
+            <span className="text-sm text-muted-foreground">Training Progress</span>
+            <span className="text-sm text-primary">{progress}%</span>
+          </div>
+          <Progress value={progress} className="h-3 mb-6" />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="rounded-lg bg-muted p-4 h-40 overflow-auto text-sm text-foreground font-mono">
               {isTraining ? (
                 <div className="space-y-1">
-                  <p className="text-green-600">INFO: Initializing training environment...</p>
-                  <p className="text-blue-600">INFO: Loading dataset from disk...</p>
-                  <p className="text-purple-600">INFO: Starting training loop...</p>
-                  {progress > 20 && <p className="text-orange-600">INFO: Epoch 1/3 - Loss: 2.453</p>}
-                  {progress > 40 && <p className="text-orange-600">INFO: Epoch 2/3 - Loss: 2.124</p>}
-                  {progress > 60 && <p className="text-orange-600">INFO: Epoch 3/3 - Loss: 1.896</p>}
-                  {progress > 80 && <p className="text-green-600">INFO: Saving model checkpoint...</p>}
-                  {progress === 100 && <p className="text-green-600">SUCCESS: Training completed!</p>}
-                </div>
-              ) : isCompleted ? (
-                <div className="space-y-1">
-                  <p className="text-green-600">Training completed successfully!</p>
-                  <p className="text-blue-600">Final Loss: 1.782</p>
-                  <p className="text-purple-600">Model saved to: ./training_output/model_01</p>
-                  <p className="text-orange-600">Ready for download or deployment</p>
+                  <p>INFO: Initializing training environment...</p>
+                  <p>INFO: Loading dataset...</p>
+                  <p>INFO: Model architecture: Transformer</p>
+                  {progress > 10 && <p>INFO: Epoch 1/10 - Step 50/1000 - Loss: 2.45</p>}
+                  {progress > 30 && <p>INFO: Epoch 3/10 - Step 150/1000 - Loss: 1.89</p>}
+                  {progress > 50 && <p>INFO: Epoch 5/10 - Step 250/1000 - Loss: 1.34</p>}
+                  {progress > 70 && <p>INFO: Epoch 7/10 - Step 350/1000 - Loss: 0.98</p>}
+                  {progress > 90 && <p>INFO: Training completed successfully!</p>}
                 </div>
               ) : (
                 <p className="text-muted-foreground">Training logs will appear here...</p>
               )}
             </div>
             
-            <div className="bg-muted rounded-lg p-4 h-40 flex items-center justify-center border-border">
+            <div className="bg-muted rounded-lg p-4 h-40 flex items-center justify-center">
               <div className="text-center">
                 <BarChart2 className="w-12 h-12 mx-auto mb-3 text-primary opacity-50" />
-                <p className="text-muted-foreground">Training metrics graph will appear during training</p>
+                <p className="text-muted-foreground">Training metrics will appear here</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
