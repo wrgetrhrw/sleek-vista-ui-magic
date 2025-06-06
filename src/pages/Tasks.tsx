@@ -3,16 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTasks } from "@/hooks/useTasks";
 import { TaskCard } from "@/components/TaskCard";
 import { CreateTaskDialog } from "@/components/CreateTaskDialog";
-import { useAuth } from "@/hooks/useAuth";
-import { AuthForm } from "@/components/AuthForm";
 
 const Tasks = () => {
-  const { user } = useAuth();
   const { tasks, isLoading, createTask, updateTask, deleteTask, isCreating } = useTasks();
-
-  if (!user) {
-    return <AuthForm />;
-  }
 
   const todoTasks = tasks.filter(task => task.status === 'todo');
   const inProgressTasks = tasks.filter(task => task.status === 'in_progress');
