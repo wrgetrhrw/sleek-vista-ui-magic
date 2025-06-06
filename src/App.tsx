@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Tasks from "./pages/Tasks";
 import AssetManager from "./pages/AssetManager";
@@ -20,31 +21,33 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <SidebarProvider>
-            <div className="min-h-screen flex w-full bg-background theme-transition">
-              <AppSidebar />
-              <main className="flex-1">
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/tasks" element={<Tasks />} />
-                  <Route path="/asset-manager" element={<AssetManager />} />
-                  <Route path="/train-model" element={<TrainModel />} />
-                  <Route path="/fine-tune-model" element={<FineTuneModel />} />
-                  <Route path="/themes" element={<Themes />} />
-                  <Route path="/help" element={<Help />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-            </div>
-          </SidebarProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <SidebarProvider>
+              <div className="min-h-screen flex w-full bg-background theme-transition">
+                <AppSidebar />
+                <main className="flex-1">
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/tasks" element={<Tasks />} />
+                    <Route path="/asset-manager" element={<AssetManager />} />
+                    <Route path="/train-model" element={<TrainModel />} />
+                    <Route path="/fine-tune-model" element={<FineTuneModel />} />
+                    <Route path="/themes" element={<Themes />} />
+                    <Route path="/help" element={<Help />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </main>
+              </div>
+            </SidebarProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

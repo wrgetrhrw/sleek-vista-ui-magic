@@ -9,7 +9,171 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      assets: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          file_path: string | null
+          file_size: number | null
+          id: string
+          is_public: boolean | null
+          metadata: Json | null
+          name: string
+          type: Database["public"]["Enums"]["asset_type"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          name: string
+          type: Database["public"]["Enums"]["asset_type"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          name?: string
+          type?: Database["public"]["Enums"]["asset_type"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          priority: number | null
+          status: Database["public"]["Enums"]["task_status"] | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          priority?: number | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          priority?: number | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      training_jobs: {
+        Row: {
+          base_model_id: string | null
+          completed_at: string | null
+          config: Json | null
+          created_at: string | null
+          dataset_id: string | null
+          id: string
+          logs: string | null
+          name: string
+          progress: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["training_status"] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          base_model_id?: string | null
+          completed_at?: string | null
+          config?: Json | null
+          created_at?: string | null
+          dataset_id?: string | null
+          id?: string
+          logs?: string | null
+          name: string
+          progress?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["training_status"] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          base_model_id?: string | null
+          completed_at?: string | null
+          config?: Json | null
+          created_at?: string | null
+          dataset_id?: string | null
+          id?: string
+          logs?: string | null
+          name?: string
+          progress?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["training_status"] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_jobs_base_model_id_fkey"
+            columns: ["base_model_id"]
+            isOneToOne: false
+            referencedRelation: "assets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "training_jobs_dataset_id_fkey"
+            columns: ["dataset_id"]
+            isOneToOne: false
+            referencedRelation: "assets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +182,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      asset_type: "model" | "dataset"
+      task_status: "todo" | "in_progress" | "completed"
+      training_status:
+        | "pending"
+        | "running"
+        | "completed"
+        | "failed"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +304,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      asset_type: ["model", "dataset"],
+      task_status: ["todo", "in_progress", "completed"],
+      training_status: [
+        "pending",
+        "running",
+        "completed",
+        "failed",
+        "cancelled",
+      ],
+    },
   },
 } as const

@@ -2,9 +2,41 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Database, Download, Upload, Search, FilterX } from "lucide-react";
+import { Database, Upload, Search, FilterX } from "lucide-react";
+import { useAssets } from "@/hooks/useAssets";
+import { AssetCard } from "@/components/AssetCard";
+import { CreateAssetDialog } from "@/components/CreateAssetDialog";
+import { useAuth } from "@/hooks/useAuth";
+import { AuthForm } from "@/components/AuthForm";
+import { useState } from "react";
 
 const AssetManager = () => {
+  const { user } = useAuth();
+  const { assets, isLoading, createAsset, deleteAsset, isCreating } = useAssets();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  if (!user) {
+    return <AuthForm />;
+  }
+
+  const filteredAssets = assets.filter(asset =>
+    asset.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    asset.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const models = filteredAssets.filter(asset => asset.type === 'model');
+  const datasets = filteredAssets.filter(asset => asset.type === 'dataset');
+
+  if (isLoading) {
+    return (
+      <div className="p-6 min-h-screen bg-background">
+        <div className="flex justify-center items-center h-64">
+          <div className="text-muted-foreground">Loading assets...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 min-h-screen bg-background">
       <h1 className="text-3xl font-bold text-foreground mb-6">Asset Manager</h1>
@@ -23,54 +55,57 @@ const AssetManager = () => {
               <Input 
                 placeholder="Search assets..." 
                 className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline">
-                All Types
-              </Button>
-              <Button variant="outline">
-                All Sources
-              </Button>
-            </div>
           </div>
 
-          <div className="h-64 flex items-center justify-center text-muted-foreground">
-            <div className="text-center">
-              <FilterX className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No assets found. Try another search.</p>
+          {filteredAssets.length === 0 ? (
+            <div className="h-64 flex items-center justify-center text-muted-foreground">
+              <div className="text-center">
+                <FilterX className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p>{searchTerm ? 'No assets found matching your search.' : 'No assets found. Create your first asset!'}</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="space-y-6">
+              {models.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Models ({models.length})</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {models.map((asset) => (
+                      <AssetCard key={asset.id} asset={asset} onDelete={deleteAsset} />
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {datasets.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Datasets ({datasets.length})</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {datasets.map((asset) => (
+                      <AssetCard key={asset.id} asset={asset} onDelete={deleteAsset} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="flex gap-2 mt-4 justify-end">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Download className="w-4 h-4 mr-2" />
-              Download New Asset
-            </Button>
-            <Button variant="secondary">
-              <Upload className="w-4 h-4 mr-2" />
-              Import Local Asset
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-foreground">My Trained Models</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64 flex items-center justify-center text-muted-foreground">
-            <div className="text-center">
-              <Database className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>You haven't trained any models yet.</p>
-            </div>
-          </div>
-
-          <div className="text-right mt-4">
-            <Button>
-              Export Selected Model
-            </Button>
+            <CreateAssetDialog onCreateAsset={createAsset} isCreating={isCreating} />
+            <CreateAssetDialog 
+              onCreateAsset={createAsset} 
+              isCreating={isCreating}
+              trigger={
+                <Button variant="secondary">
+                  <Upload className="w-4 h-4 mr-2" />
+                  Import Local Asset
+                </Button>
+              }
+            />
           </div>
         </CardContent>
       </Card>
