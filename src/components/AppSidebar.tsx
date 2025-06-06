@@ -12,8 +12,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Home, CheckSquare, Database, Zap, Paintbrush, Palette, HelpCircle, Brain } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { UserMenu } from "@/components/UserMenu";
-import { useAuth } from "@/hooks/useAuth";
 
 const menuItems = [
   { title: "Home", url: "/", icon: Home },
@@ -27,22 +25,18 @@ const menuItems = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const { user } = useAuth();
 
   return (
     <Sidebar className="border-r border-slate-800 bg-slate-900/50 backdrop-blur-sm">
       <SidebarHeader className="p-6 border-b border-slate-800">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-teal-500 rounded-lg flex items-center justify-center">
-              <Brain className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-white">LLM-Train</h2>
-              <p className="text-sm text-slate-400">Task Manager</p>
-            </div>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-teal-500 rounded-lg flex items-center justify-center">
+            <Brain className="w-6 h-6 text-white" />
           </div>
-          {user && <UserMenu />}
+          <div>
+            <h2 className="text-xl font-bold text-white">LLM-Train</h2>
+            <p className="text-sm text-slate-400">Task Manager</p>
+          </div>
         </div>
       </SidebarHeader>
       
@@ -75,7 +69,7 @@ export function AppSidebar() {
       <SidebarFooter className="p-4 border-t border-slate-800">
         <div className="text-xs text-slate-500 text-center">
           <p>Version 2.0.1</p>
-          <p className="mt-1">{user ? 'Connected' : 'Ready'}</p>
+          <p className="mt-1">Ready</p>
         </div>
       </SidebarFooter>
     </Sidebar>
